@@ -1,0 +1,29 @@
+version: '3'
+services:
+  client:
+    build: client
+    ports:
+      - '4200:4200'
+      - '49152:49152'
+    volumes:
+      - './client/src:/home/app/client/src'
+    environment:
+      - NODE_ENV
+    command: npm start
+  express:
+    build: express
+    ports:
+      - '3000:3000'
+    volumes:
+      - './express/routes:/home/app/server/routes'
+    depends_on:
+      - redis
+    environment:
+      - NODE_ENV
+      - REDIS_URL
+    command: npm start
+  redis:
+    image: redis
+    ports:
+      - '4201:6379'
+    command: redis-server --appendonly yes

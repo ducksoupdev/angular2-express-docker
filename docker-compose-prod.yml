@@ -1,0 +1,31 @@
+version: '3'
+services:
+  clientprod:
+    build:
+      context: client
+      dockerfile: Dockerfile-prod
+    volumes:
+      - '/opt/client:/home/app/client/dist'
+    environment:
+      - NODE_ENV=production
+    command: npm run build
+  express:
+    build: express
+    ports:
+      - '80:3000'
+    volumes:
+      - '/opt/client:/home/app/server/public'
+    depends_on:
+      - clientprod
+      - redis
+    environment:
+      - NODE_ENV=production
+      - REDIS_URL
+    command: [pm2-docker, /home/app/server/bin/www]
+  redis:
+    image: redis
+    ports:
+      - '6379'
+    environment:
+      - REDIS_PASSWORD=8U8G7i!S801p
+    command: redis-server --appendonly yes

@@ -1,0 +1,17 @@
+FROM node:6.9.4
+MAINTAINER Matt Levy "<ducksoupdev@gmail.com>"
+ENV REFRESHED_AT 2017_02_22
+
+RUN npm install -g @angular/cli
+
+ENV HOME=/home/app
+WORKDIR $HOME
+
+ENV APP_NAME=client
+
+COPY . $HOME/$APP_NAME/
+
+WORKDIR $HOME/$APP_NAME
+RUN npm install
+
+CMD ["npm", "run", "build"]
