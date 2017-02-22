@@ -7,8 +7,7 @@ services:
       - '49152:49152'
     volumes:
       - './client/src:/home/app/client/src'
-    environment:
-      - NODE_ENV
+    env_file: .env
     command: npm start
   express:
     build: express
@@ -18,9 +17,7 @@ services:
       - './express/routes:/home/app/server/routes'
     depends_on:
       - redis
-    environment:
-      - NODE_ENV
-      - REDIS_URL
+    env_file: .env
     command: npm start
   redis:
     image: redis
